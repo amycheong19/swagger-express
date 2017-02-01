@@ -52,9 +52,8 @@ exports.list = function(req, res){
   *       - application/json
   *      parameters:
   *        - name: id
-  *          in: path
   *          description: User id
-  *          paramType: query
+  *          paramType: path
   *          required: true
   *          dataType: integer
   */
@@ -62,9 +61,35 @@ exports.view = function(req, res){
   res.json(req.user)
 };
 
-
+/**
+ * @swagger
+ * path: /user/{id}/edit
+ * operations:
+ *   -  httpMethod: PUT
+ *      summary: Update user with specific id
+ *      notes: Returns updated user based on id
+ *      responseClass: User
+ *      nickname: updateUser
+ *      produces:
+ *       - application/json
+ *      parameters:
+ *        - name: id
+ *          description: User id
+ *          paramType: path
+ *          required: true
+ *          dataType: integer
+ *        - name: name
+ *          description: User name
+ *          paramType: query
+ *          required: true
+ *          dataType: string
+ *        - name: email
+ *          description: User email
+ *          paramType: query
+ *          required: true
+ *          dataType: string
+ */
 exports.update = function(req, res){
-  console.log(res);
   req.user.name = req.query.name;
   req.user.email = req.query.email;
   res.json(req.user)
