@@ -60,3 +60,7 @@ app.put('/user/:id/edit', user.update);
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });
+
+//TODO: app.configure is deprecated - need to update to express4
+//Check if run different proj under 1 server port
+// Error handling 
