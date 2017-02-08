@@ -1,6 +1,7 @@
 var express = require('express')
 var router = express.Router()
-var user = require('./user-api')
+var user = require('../example/routes/user-api-routes.js')
+
 
 /**
  * Project APIs.
@@ -8,9 +9,9 @@ var user = require('./user-api')
 //////////MEETING-ROOMS/////////////
 var meetingRoomsBaseURL = ''
 router.get('/users', user.list);
+router.post('/users', user.create);
 router.get('/user/:id', user.view);
-router.get('/user/:id/view', user.view);
-router.put('/user/:id/edit', user.update);
+router.put('/users/:id', user.update);
 router.delete('/users', user.delete);
 
 module.exports = router
