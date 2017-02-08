@@ -1,252 +1,72 @@
-{swagger-express}
+Swagger-express
 =========
+This project is to start a localhost that serves APIs routes in multiple projects.
 
-[Swagger](https://developers.helloreverb.com/swagger/) is a specification and complete framework 
-implementation for describing, producing, consuming, and visualizing RESTful web services.
-View [demo](http://petstore.swagger.wordnik.com/).
-
-__{swagger-express}__ is a simple and clean solution to integrate swagger with express.
-
-## Installation
-
-    $ npm install -g swagger-express
-
-## Quick Start
-
-Configure {swagger-express} as express middleware.
-
-
-`apiVersion`      -> Your api version.
-
-`swaggerVersion`  -> Swagger version.
-
-`swaggerUI`       -> Where is your swagger-ui?
-
-`swaggerURL`      -> Path to use for swagger ui web interface.
-
-`swaggerJSON`     -> Path to use for swagger ui JSON.
-
-`basePath`        -> The basePath for swagger.js
-
-`info`            -> [Metadata][info] about the API
-
-`apis`            -> Define your api array.
-
-`middleware`      -> Function before response.
-
+## Installation & Quick Start
 ```
-var swagger = require('swagger-express');
-
-app.configure(function(){
-  ...
-  app.use(swagger.init(app, {
-    apiVersion: '1.0',
-    swaggerVersion: '1.0',
-    swaggerURL: '/swagger',
-    swaggerJSON: '/api-docs.json',
-    swaggerUI: './public/swagger/',
-    basePath: 'http://localhost:3000',
-    info: {
-      title: 'swagger-express sample app',
-      description: 'Swagger + Express = {swagger-express}'
-    },
-    apis: ['./api.js', './api.yml'],
-    middleware: function(req, res){}
-  }));
-  app.use(app.router);
-  ...
-});
+cd <project path>/examples
+npm install
+node app.js
 ```
 
-[info]: https://github.com/wordnik/swagger-spec/blob/master/versions/1.2.md#513-info-object
+## To setup a new project
+- Create API files: This is the place you set your APIs logic and Swagger 
 
-## Read from jsdoc
+Refer: ../examples/APIs/meetingRoomsAPIs.js
 
-Example 'api.js'
+- Create Routing file: Set URL for each APIs 
 
-```js
+Refer: ../examples/meetingRoomsRoutes.js
 
-/**
- * @swagger
- * resourcePath: /api
- * description: All about API
- */
+- Setup project in app.js
+```
+//////////MEETING-ROOMS/////////////
+// I have set the APIs under folder './APIs/*' so preferably set your routes under ../example/APIs folder
+var mrRoutes =  require('./meetingRoomsRoutes.js');
+// Set your new project baseURL so that your APIs started with : <host>/newProject/...
+app.use('/meetingRooms', mrRoutes)
 
-/**
- * @swagger
- * path: /login
- * operations:
- *   -  httpMethod: POST
- *      summary: Login with username and password
- *      notes: Returns a user based on username
- *      responseClass: User
- *      nickname: login
- *      consumes: 
- *        - text/html
- *      parameters:
- *        - name: username
- *          description: Your username
- *          paramType: query
- *          required: true
- *          dataType: string
- *        - name: password
- *          description: Your password
- *          paramType: query
- *          required: true
- *          dataType: string
- */
-exports.login = function (req, res) {
-  var user = {};
-  user.username = req.param('username');
-  user.password = req.param('password');
-  res.json(user);
-}
+```
+- Start server
+Make sure you are in example folder.
+```
+node app.js
+```
+You should see  "***Express started on port 3000***" at your terminal.
 
-/**
- * @swagger
- * models:
- *   User:
- *     id: User
- *     properties:
- *       username:
- *         type: String
- *       password:
- *         type: String    
- */
+Go to browser/POSTMAN to query first API under http://localhost:3000/meetingRooms/users and Voila!
+
+- To get auto-generated json for Swagger
+    - Go to browser/POSTMAN to query first API under http://localhost:3000/swagger.json
+    - Copy all and go to [Swagger Editor](http://editor.swagger.io/) and paste Json at File > Paste Json
+
+**NOTE**
+------
+- You need to add in own host and basePath at the editor if you want to query it straightaway at Swagger editor
+```
+info:
+  title: SEED APIs
+  version: 1.0.0
+  description: <descriptions>
+swagger: '2.0'
+host: 'localhost:3000'   //<<<<<<<<ADD THIS
+basePath: /meetingRooms //<<<<<<<<ADD THIS as what you specify in app.js
+```
+- Add edit/add more APIs path for Swagger
+```
+var options = {
+    swaggerDefinition: {
+      ....
+    apis: ['./APIs/*'], //<<<<< Change this path or add more paths as you want
+  };
 ```
 
-## Read from yaml file
-
-Example 'api.yml'
-
-```yml
-resourcePath: /api
-description: All about API
-apis: 
-
-- path: /login
-  operations:
-
-  - httpMethod: POST
-    summary: Login with username and password
-    notes: Returns a user based on username
-    responseClass: User
-    nickname: login
-    consumes: 
-      - text/html
-    parameters:
-
-    - name: username
-      dataType: string
-      paramType: query
-      required: true
-      description: Your username
-
-    - name: password
-      dataType: string
-      paramType: query
-      required: true
-      description: Your password
-
-models:
-    User:
-      id: User
-      properties:
-        username:
-          type: String
-        password:
-          type: String    
-```
-
-## Read from jsdoc
-
-Example 'api.coffee'
-
-```coffee
-
-###
- * @swagger
- * resourcePath: /api
- * description: All about API
-###
-
-###
- * @swagger
- * path: /login
- * operations:
- *   -  httpMethod: POST
- *      summary: Login with username and password
- *      notes: Returns a user based on username
- *      responseClass: User
- *      nickname: login
- *      consumes:
- *        - text/html
- *      parameters:
- *        - name: username
- *          description: Your username
- *          paramType: query
- *          required: true
- *          dataType: string
- *        - name: password
- *          description: Your password
- *          paramType: query
- *          required: true
- *          dataType: string
-###
-
-###
- * @swagger
- * models:
- *   User:
- *     id: User
- *     properties:
- *       username:
- *         type: String
- *       password:
- *         type: String
-###
-```
+## Refer
+1. [Express 4](https://expressjs.com/en/guide/routing.html): To know more on Express routings and APIs
+2. [Swagger Jsdoc](https://github.com/Surnet/swagger-jsdoc): To know more about setting up Swagger in .Js
+3. [Swagger specification](http://swagger.io/specification/): For swagger syntax
+4. [Swagger Editor](http://editor.swagger.io/): To paste your JSON(from localhost:3000/swagger.json) and edit swagger on live mode
 
 
-## Examples
-
-Clone the {swagger-express} repo, then install the dev dependencies:
-
-    $ git clone git://github.com/fliptoo/swagger-express.git --depth 1
-    $ cd swagger-express
-    $ npm install
-
-and run the example:
-
-    $ cd example
-    $ node app.js
-    
-# Credits
-
-- [Express](https://github.com/visionmedia/express)
-- [swagger-jack](https://github.com/feugy/swagger-jack)
-
-## License
-
-(The MIT License)
-
-Copyright (c) 2013 Fliptoo &lt;fliptoo.studio@gmail.com&gt;
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## Useful tutorial
+- http://mherman.org/blog/2016/05/26/swagger-and-nodejs/#.WJq5RBJ946g
