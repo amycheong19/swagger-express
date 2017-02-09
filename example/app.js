@@ -8,7 +8,6 @@ var express = require('express')
   , path = require('path')
   , swagger = require('../')
 
-
   var swaggerJSDoc = require('swagger-jsdoc');
 
   var options = {
@@ -21,7 +20,7 @@ var express = require('express')
     },
     host: 'localhost:3000',
     basePath: '/',
-    apis: ['./routes/*'], // Path to the API docs
+    apis: ['./APIs/*'], // Path to the API docs
   };
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
@@ -29,14 +28,14 @@ var swaggerSpec = swaggerJSDoc(options);
 
 
 /**
- * Project APIs.
+ * Projects Setup.
  */
 //////////MEETING-ROOMS/////////////
-var meetingRooms =  require('./meetingRoomsPath.js');
-app.use('/meeting-rooms', meetingRooms)
+var mrRoutes =  require('./meetingRoomsRoutes.js');
+app.use('/meetingRooms', mrRoutes)
 
 //////////NEW PROJECT TEMPLATE/////////////
-// Set your routes under ../example/routes folder
+// Set your routes under ../example/APIs folder
 // var newProject =  require('./<newProject>.js');
 //
 // Set your new project baseURL so that your APIs started with : <host>/<baseURL>/...
@@ -45,7 +44,7 @@ app.use('/meeting-rooms', meetingRooms)
 
 /**
  * Server & port setup
- */
+ two*/
  // serve swagger
  app.get('/swagger.json', function(req, res) {
    res.setHeader('Content-Type', 'application/json');
