@@ -18,14 +18,20 @@ var express = require('express')
         description: "<descriptions>"
       },
       host: 'localhost:3000',
-      basePath: '/meetingRooms'
+      basePath: '/meetingRooms',
+      schemes: ['http']
     },
     apis: ['./APIs/*'], // Path to the API docs
   };
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
 var swaggerSpec = swaggerJSDoc(options);
-
+// Added header for CORS
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 
 /**
  * Projects Setup.
@@ -47,13 +53,6 @@ app.get('/meetingRooms/swagger.json', function(req, res) {
 
 /**
  * Server & port setup */
- // Added header for CORS
-app.all('/*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
-
 if (!module.parent) {
   app.listen(3000);
   console.log('Express started on port 3000');
