@@ -17,9 +17,9 @@ var express = require('express')
         version: '1.0.0', // Version (required)
         description: "<descriptions>"
       },
+      host: 'localhost:3000',
+      basePath: '/meetingRooms'
     },
-    host: 'localhost:3000',
-    basePath: '/',
     apis: ['./APIs/*'], // Path to the API docs
   };
 
@@ -31,9 +31,12 @@ var swaggerSpec = swaggerJSDoc(options);
  * Projects Setup.
  */
 //////////MEETING-ROOMS/////////////
-var mrRoutes =  require('./meetingRoomsRoutes.js');
+var mrRoutes =  require('./routes/meetingRoomsRoutes.js');
 app.use('/meetingRooms', mrRoutes)
-
+app.get('/meetingRooms/swagger.json', function(req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  res.send(swaggerSpec);
+});
 //////////NEW PROJECT TEMPLATE/////////////
 // Set your routes under ../example/APIs folder
 // var newProject =  require('./<newProject>.js');
@@ -46,10 +49,12 @@ app.use('/meetingRooms', mrRoutes)
  * Server & port setup
  two*/
  // serve swagger
- app.get('/swagger.json', function(req, res) {
-   res.setHeader('Content-Type', 'application/json');
-   res.send(swaggerSpec);
- });
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 if (!module.parent) {
   app.listen(3000);
   console.log('Express started on port 3000');
