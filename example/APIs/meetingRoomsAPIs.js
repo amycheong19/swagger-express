@@ -83,23 +83,23 @@ exports.view = function(req, res){
 
 /**
 * @swagger
-*  /users:
+*  /user:
 *     post:
 *       description: |
 *         Create a `User` object.
 *       tags:
 *         - User
 *       parameters:
-*         - name: users
-*           in: body
-*           description: User desc
+*         - name: name
+*           in: query
+*           description: User name
 *           required: true
-*           schema:
-*             properties:
-*               users:
-*                 type: array
-*                 items:
-*                   $ref: '#/definitions/User'
+*           type: string
+*         - name: email
+*           in: query
+*           description: User email
+*           required: true
+*           type: string
 *       responses:
 *         '200':
 *           description: Profile information for a user
@@ -172,20 +172,18 @@ exports.update = function(req, res){
 
 /**
   *   @swagger
-  *   /users:
+  *   /user:
   *     delete:
   *       description: |
-  *         Delete `User` objects based on array of userIDs
+  *         Delete `User` object with specific ID
   *       tags:
   *         - User
   *       parameters:
-  *         - name: users
+  *         - name: id
   *           in: query
   *           description: User desc
   *           required: true
-  *           type: array
-  *           items:
-  *             type: integer
+  *           type: integer
   *       responses:
   *         '200':
   *           description: Return remaining users objects
